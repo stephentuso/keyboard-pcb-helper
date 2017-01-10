@@ -1,0 +1,22 @@
+.root-container {
+    text-align: center;
+}
+
+.key-container {
+    line-height: 0;
+    font-size: 0;
+    position: relative;
+}
+
+.keyboard-key {
+    height: 56px;
+    width: 56px;
+    background: #eee;
+    display: inline-block;
+    position: absolute;
+}
+
+.footprint {
+    position: absolute;
+    border: 1px solid grey;
+}

@@ -7,7 +7,9 @@ $(document).ready(function() {
         var input = document.querySelector('#keyboard-layout-input').value;
         var footprint = parseInt(document.querySelector('#footprint-size-input').value);
         var values = parseInput(input);
+        calculateDimensions(values, footprint);
         layoutKeys(values, footprint);
+        layoutTable(values);
     });
 
 });
@@ -117,32 +119,41 @@ function copyCurrentKey(currentKey) {
 
 }
 
-function calculateDimensions(values) {
+function calculateDimensions(values, footprintSize) {
 
     for (var i = 0; i < values.length; i++) {
-
+        _calculateRowDimens(values[i], footprintSize);
     }
 
 }
 
-function getDimens(key, prev) {
+function _calculateRowDimens(row, footprintSize) {
 
-
+    for (var i = 0; i < row.length; i++) {
+        var key = row[i];
+        key.absXmm = key.absX * ONE_U;
+        key.absYmm = key.absY * ONE_U;
+        key.footX = key.absXmm + between(key.w, null, footprintSize);
+        key.footY = key.absYmm + between(key.h, null, footprintSize);
+    }
 
 }
 
 function layoutKeys(values, footprint) {
     var $container = $('.key-container');
 
-    var topYCoord = between(1, null, footprint);
-
     $container.empty();
+
+    var bottomPosition;
     for (var i = 0; i < values.length; i++) {
-        addRow(values[i], $container, footprint);
+        bottomPosition = _addKeyRow(values[i], $container, footprint);
     }
+
+    $container.css('height', String(bottomPosition) + "px");
 }
 
-function addRow(row, $parent, footprintSize, topYCoord) {
+function _addKeyRow(row, $parent, footprintSize) {
+    var bottomPosition = 0;
     for (var i = 0; i < row.length; i++) {
 
         var key = $('<div>');
@@ -167,6 +178,52 @@ function addRow(row, $parent, footprintSize, topYCoord) {
         key.append(footprint);
 
         $parent.append(key);
+
+        var bottom = (row[i].absY + row[i].h) * KEY_WIDTH;
+        if (bottom > bottomPosition) {
+            bottomPosition = bottom;
+        }
     }
 
+    return bottomPosition;
+}
+
+function layoutTable(values) {
+    var $table = $('#table');
+    $table.empty();
+
+    for (var i = 0; i < values.length; i++) {
+        _addTableRow(values[i], $table);
+    }
+
+}
+
+function _addTableRow(row, $parent) {
+    var $row = $('<tr>');
+    for (var i = 0; i < row.length; i++) {
+
+        var $td = $('<td>');
+        var x = $('<p>');
+        x.text("x: " + _coordText(row[i].footX));
+        var y = $('<p>');
+        y.text("y: " + _coordText(row[i].footY));
+        $td.append(x);
+        $td.append(y);
+
+        $row.append($td);
+    }
+    $parent.append($row);
+}
+
+function _coordText(value) {
+    var text = String(value);
+    var components = text.split('.');
+    if (components.length <= 1) {
+        return text;
+    }
+
+    if (components[1].length > 3) {
+        components[1] = components[1].substring(0, 3);
+    }
+    return components.join('.') + " mm";
 }

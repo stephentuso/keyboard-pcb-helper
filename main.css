@@ -1,0 +1,54 @@
+#form-container {
+    padding: 20px;
+    max-width: 600px;
+}
+
+#keyboard-layout-input {
+    display: block;
+    width: 100%;
+    min-height: 100px;
+    margin-bottom: 16px;
+}
+
+.root-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.key-container {
+    line-height: 0;
+    font-size: 0;
+    position: relative;
+}
+
+.keyboard-key {
+    height: 56px;
+    width: 56px;
+    background: #eee;
+    display: inline-block;
+    position: absolute;
+}
+
+.footprint {
+    position: absolute;
+    border: 1px solid grey;
+}
+
+.table-container {
+    padding: 20px;
+}
+
+#table {
+    border-collapse: collapse;
+}
+
+#table td {
+    border: 1px solid lightgrey;
+    font-size: 12px;
+    line-height: 13px;
+    padding: 8px;
+}
+
+#table td p {
+    margin-bottom: 2px;
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Keyboard PCB Helper</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="main.js"></script>
+</head>
+<body>
+    <div id="form-container">
+        <h1>Keyboard PCB Helper</h1>
+        <p>Layout from <a href="http://www.keyboard-layout-editor.com/">Keyboard Layout Editor</a> (Raw Data tab):</p>
+        <textarea id="keyboard-layout-input"></textarea>
+        <p>Footprint size <input type="text" id="footprint-size-input" value="15.6"> mm</p>
+        <p>X offset <input type="text" id="x-offset-input" value="0"> mm</p>
+        <p>Y offset <input type="text" id="y-offset-input" value="0"> mm</p>
+        <button id="submit">Submit</button>
+    </div>
+    <div class="root-container">
+        <div class="key-container"></div>
+    </div>
+    <div class="table-container">
+        <table id="table"></table>
+    </div>
+</body>
+</html>

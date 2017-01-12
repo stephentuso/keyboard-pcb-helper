@@ -1,14 +1,20 @@
 var ONE_U = 19.05;
 var KEY_WIDTH = 56;
 
+var footprintSize;
+var offsetX;
+var offsetY;
+
 $(document).ready(function() {
 
     $("#submit").click(function() {
         var input = document.querySelector('#keyboard-layout-input').value;
-        var footprint = parseInt(document.querySelector('#footprint-size-input').value);
+        footprintSize = parseInt(document.querySelector('#footprint-size-input').value);
+	offsetX = parseInt($('#offset-x-input').get(0).value);
+	offsetY = parseInt($('#offset-y-input').get(0).value);
         var values = parseInput(input);
-        calculateDimensions(values, footprint);
-        layoutKeys(values, footprint);
+        calculateDimensions(values);
+        layoutKeys(values);
         layoutTable(values);
     });
 
@@ -119,40 +125,42 @@ function copyCurrentKey(currentKey) {
 
 }
 
-function calculateDimensions(values, footprintSize) {
+function calculateDimensions(values) {
 
     for (var i = 0; i < values.length; i++) {
-        _calculateRowDimens(values[i], footprintSize);
+        _calculateRowDimens(values[i]);
     }
 
 }
 
-function _calculateRowDimens(row, footprintSize) {
+function _calculateRowDimens(row) {
 
     for (var i = 0; i < row.length; i++) {
         var key = row[i];
         key.absXmm = key.absX * ONE_U;
         key.absYmm = key.absY * ONE_U;
-        key.footX = key.absXmm + between(key.w, null, footprintSize);
-        key.footY = key.absYmm + between(key.h, null, footprintSize);
+        key.footX = key.absXmm + offsetX + between(key.w, null, footprintSize);
+        key.footY = key.absYmm + offsetY + between(key.h, null, footprintSize);
+	key.w += offsetX / ONE_U;
+	key.h += offsetY / ONE_U;
     }
 
 }
 
-function layoutKeys(values, footprint) {
+function layoutKeys(values) {
     var $container = $('.key-container');
 
     $container.empty();
 
     var bottomPosition;
     for (var i = 0; i < values.length; i++) {
-        bottomPosition = _addKeyRow(values[i], $container, footprint);
+        bottomPosition = _addKeyRow(values[i], $container);
     }
 
     $container.css('height', String(bottomPosition) + "px");
 }
 
-function _addKeyRow(row, $parent, footprintSize) {
+function _addKeyRow(row, $parent) {
     var bottomPosition = 0;
     for (var i = 0; i < row.length; i++) {
 

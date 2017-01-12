@@ -10,8 +10,8 @@ $(document).ready(function() {
     $("#submit").click(function() {
         var input = document.querySelector('#keyboard-layout-input').value;
         footprintSize = parseInt(document.querySelector('#footprint-size-input').value);
-	offsetX = parseInt($('#offset-x-input').get(0).value);
-	offsetY = parseInt($('#offset-y-input').get(0).value);
+	offsetX = parseInt($('#x-offset-input').get(0).value);
+	offsetY = parseInt($('#y-offset-y-input').get(0).value);
         var values = parseInput(input);
         calculateDimensions(values);
         layoutKeys(values);

@@ -291,6 +291,7 @@ function layoutTable(values) {
         _addTableRow(values[i], $table);
     }
 
+    $('#table-label').css('display', 'block');
 }
 
 function _addTableRow(row, $parent) {

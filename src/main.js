@@ -1,11 +1,29 @@
 var ONE_U = 19.05;
 var KEY_WIDTH = 56;
 
+var inches = false;
+
 var footprintSize;
 var offsetX;
 var offsetY;
 
 $(document).ready(function() {
+
+    $("#mm").click(function() {
+        if (inches) {
+            convertAllInputs(toMm);
+        }
+        inches = false;
+        updateUnitLabels();
+    });
+
+    $("#in").click(function() {
+        if (!inches) {
+            convertAllInputs(toInches);
+        }
+        inches = true;
+        updateUnitLabels();
+    });
 
     $("#submit").click(function() {
         var values;
@@ -41,22 +59,71 @@ function _parseNumberInput(value) {
         throw new Error("Invalid number input");
     }
 
-    return num;
+    return convertInputNumber(num);
 }
 
-function between(cur, prev, cut) {
-    cut = cut || 14;
+function toMm(inches) {
+    return inches * 25.4;
+}
+
+function toInches(mm) {
+    return mm / 25.4;
+}
+
+function convertInputNumber(input) {
+    return inches ? toMm(input) : input;
+}
+
+function convertOutputNumber(output) {
+    return inches ? toInches(output) : output;
+}
+
+function convertAllInputs(func) {
+    var inputs = [
+        $('#footprint-size-input'),
+        $('#x-offset-input'),
+        $('#y-offset-input')
+    ];
+
+    for (var i = 0; i < inputs.length; i++) {
+        var val = parseFloat(inputs[i].val());
+        if (!isNaN(val)) {
+            inputs[i].val(func(val));
+        }
+    }
+}
+
+function updateUnitLabels() {
+    var unit = inches ? "in" : "mm";
+    $('.unit').text(unit);
+}
+
+/**
+ * Returns the distance between the footprints of two adjacent keys
+ * @param cur Size of current key in units
+ * @param prev Size of previous key in units
+ * @param cut Size of cutout / footprint in mm
+ */
+function between(cur, prev, footprint) {
+    footprint = footprint || 15.6;
 
     var prevOffset = !prev ? 0 : between(prev);
 
-    return ((ONE_U * cur - cut) / 2) + prevOffset;
+    return ((ONE_U * cur - footprint) / 2) + prevOffset;
 }
 
-function offset(cur, prev, cut) {
-    cut = cut || 14;
+/**
+ * Returns the offset between the leading edges of footprints of two adjacent
+ * keys
+ * @param cur Size of current key in units
+ * @param prev Size of previous key in units
+ * @param footprint Size of footprint in mm
+ */
+function offset(cur, prev, footprint) {
+    footprint = footprint || 15.6;
 
-    var b = between(cur, prev, cut);
-    return !prev ? b : b + cut;
+    var b = between(cur, prev, footprint);
+    return !prev ? b : b + footprint;
 }
 
 function parseInput(input) {
@@ -98,8 +165,6 @@ function parseInput(input) {
             currentKey.h = 1;
         }
     }
-
-    console.log(values);
 
     return values;
 }
@@ -246,14 +311,9 @@ function _addTableRow(row, $parent) {
 }
 
 function _coordText(value) {
-    var text = String(value);
-    var components = text.split('.');
-    if (components.length <= 1) {
-        return text;
-    }
 
-    if (components[1].length > 3) {
-        components[1] = components[1].substring(0, 3);
-    }
-    return components.join('.') + " mm";
+    var num = convertOutputNumber(value);
+    var unit = inches ? " in" : " mm";
+
+    return String(num.toFixed(4)) + unit;
 }

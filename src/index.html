@@ -11,11 +11,12 @@
 <body>
     <div id="form-container">
         <h1>Keyboard PCB Helper</h1>
+        <p>Units: <input id="mm" type="radio" name="units" value="mm" checked> mm <input id="in" type="radio" name="units" value="in"> in</p>
         <p>Layout from <a href="http://www.keyboard-layout-editor.com/">Keyboard Layout Editor</a> (Raw Data tab):</p>
         <textarea id="keyboard-layout-input"></textarea>
-        <p>Footprint size <input type="text" id="footprint-size-input" value="15.6"> mm</p>
-        <p>X offset <input type="text" id="x-offset-input" value="0"> mm</p>
-        <p>Y offset <input type="text" id="y-offset-input" value="0"> mm</p>
+        <p>Footprint size <input type="text" id="footprint-size-input" value="15.6"> <span class="unit">mm</span></p>
+        <p>X offset: <input type="text" id="x-offset-input" value="0"> <span class="unit">mm</span></p>
+        <p>Y offset: <input type="text" id="y-offset-input" value="0"> <span class="unit">mm</span></p>
         <button id="submit">Submit</button>
     </div>
     <div class="root-container">

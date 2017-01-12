@@ -2,6 +2,7 @@
   "name": "keyboard-pcb-helper",
   "version": "1.0.0",
   "description": "[https://stephentuso.github.io/keyboard-pcb-helper/](https://stephentuso.github.io/keyboard-pcb-helper/)",
+  "private": true,
   "scripts": {
       "publish": "node publish.js"
   },

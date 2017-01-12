@@ -8,17 +8,41 @@ var offsetY;
 $(document).ready(function() {
 
     $("#submit").click(function() {
-        var input = document.querySelector('#keyboard-layout-input').value;
-        footprintSize = parseInt(document.querySelector('#footprint-size-input').value);
-	offsetX = parseInt($('#x-offset-input').get(0).value);
-	offsetY = parseInt($('#y-offset-input').get(0).value);
-        var values = parseInput(input);
+        var values;
+        try {
+            var layoutInput = document.querySelector('#keyboard-layout-input').value;
+            var footInput = $('#footprint-size-input').get(0).value;
+            var xOffInput = $('#x-offset-input').get(0).value;
+            var yOffInput = $('#y-offset-input').get(0).value;
+            footprintSize = _parseNumberInput(footInput);
+    	    offsetX = _parseNumberInput(xOffInput);
+    	    offsetY = _parseNumberInput(yOffInput);
+            values = parseInput(layoutInput);
+        } catch (e) {
+            window.alert(e);
+            return;
+        }
+
         calculateDimensions(values);
         layoutKeys(values);
         layoutTable(values);
     });
 
 });
+
+function _parseNumberInput(value) {
+    if (!value) {
+        return 0;
+    }
+
+    var num = parseFloat(value);
+
+    if (isNaN(num)) {
+        throw new Error("Invalid number input");
+    }
+
+    return num;
+}
 
 function between(cur, prev, cut) {
     cut = cut || 14;
@@ -141,8 +165,6 @@ function _calculateRowDimens(row) {
         key.absYmm = key.absY * ONE_U;
         key.footX = key.absXmm + offsetX + between(key.w, null, footprintSize);
         key.footY = key.absYmm + offsetY + between(key.h, null, footprintSize);
-	key.w += offsetX / ONE_U;
-	key.h += offsetY / ONE_U;
     }
 
 }
@@ -171,8 +193,8 @@ function _addKeyRow(row, $parent) {
         key.css('left', String(row[i].absX * KEY_WIDTH) + "px");
         key.css('top', String(row[i].absY * KEY_WIDTH) + "px");
 
-        var leftOffset = (between(row[i].w, null, footprintSize) / ONE_U);
-        var topOffset = (between(row[i].h, null, footprintSize) / ONE_U);
+        var leftOffset = (row[i].footX - (row[i].absX * ONE_U)) / ONE_U;
+        var topOffset = (row[i].footY - (row[i].absY * ONE_U)) / ONE_U;
 
         var footprint = $('<div>');
         footprint.addClass('footprint');

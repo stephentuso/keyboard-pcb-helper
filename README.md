@@ -1,5 +1,7 @@
 # keyboard-pcb-helper
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/stephentuso/keyboard-pcb-helper.svg)](https://greenkeeper.io/)
+
 [https://stephentuso.github.io/keyboard-pcb-helper/](https://stephentuso.github.io/keyboard-pcb-helper/)
 
 Calculates switch footprint coordinates for keyboard layouts
